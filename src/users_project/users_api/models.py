@@ -1,9 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth.models import BaseUserManager
 
-class UsersProfileManager(BaseUserManager):
+class UserProfileManager(BaseUserManager):
   """Helps working with costume user model"""
 
   def create_user(self, email, name, password=None):
@@ -26,9 +25,11 @@ class UsersProfileManager(BaseUserManager):
   def create_superuser(self, email, name, password):
     """Creates a new superuser"""
 
-    user = self.create_superuser(email, name, password)
+    user = self.create_user(email, name, password)
 
+    # Make this user an admin.
     user.is_superuser = True
+    user.is_staff = True
     user.save(using=self._db)
 
     return user
@@ -42,7 +43,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
   is_active = models.BooleanField(default=True)  # Determins if user is currently active in system
   is_staff = models.BooleanField(default=False)
 
-  object = UsersProfileManager()
+  object = UserProfileManager()
 
   USERNAME_FIELD = 'email'
   # List of required fields
