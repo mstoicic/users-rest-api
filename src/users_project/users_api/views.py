@@ -3,10 +3,14 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
-from . import serializers
+from rest_framework import filters  # For search function
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
+# Login Viewset
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
+
+from . import serializers
 from . import models
 from . import permissions
 # Create your views here.
@@ -102,6 +106,7 @@ class HelloViewSet(viewsets.ViewSet):
 
     return Response({'http_method':'DELETE'})
 
+
 class UserProfileViewSet(viewsets.ModelViewSet):
   """Handles creating and updating users profile"""
 
@@ -110,3 +115,17 @@ class UserProfileViewSet(viewsets.ModelViewSet):
   # Added Token authentication
   authentication_classes = (TokenAuthentication,)
   permission_classes = (permissions.UpdateOwnProfile,)
+  # Added search capability
+  filter_backends = (filters.SearchFilter,)
+  search_fields = ('name', 'email',)
+
+
+class LoginViewSet(viewsets.ViewSet):
+  """Checks email & password and returns auth token"""
+
+  serializer_class = AuthTokenSerializer
+
+  def create(self, request):
+    """Use ObtainAuthToken APIView to validate and create a token"""
+
+    return ObtainAuthToken().post(request)
