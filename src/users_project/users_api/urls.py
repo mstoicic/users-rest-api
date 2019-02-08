@@ -12,6 +12,9 @@ router.register('feed', views.UserProfileFeedViewSet)   # No need for base_name 
 
 
 urlpatterns = [
-    url(r'^hello-view/', views.HelloApiView.as_view()),
     url(r'', include(router.urls))
 ]
+# urlpatterns = [
+#     url(r'^hello-view/', views.HelloApiView.as_view()),
+#     url(r'', include(router.urls))
+# ]

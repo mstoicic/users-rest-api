@@ -15,51 +15,50 @@ from rest_framework.permissions import IsAuthenticated
 from . import serializers
 from . import models
 from . import permissions
-# Create your views here.
 
-class HelloApiView(APIView):
-  """Test API View"""
+# TEST
+# class HelloApiView(APIView):
+#   """Test API View"""
 
-  serializer_class = serializers.HelloSerializer
+#   serializer_class = serializers.HelloSerializer
 
-  def get(self, request, format=None):
-    """Return a list of APIView features"""
+#   def get(self, request, format=None):
+#     """Return a list of APIView features"""
 
-    an_apiview = [
-      'Uses HTTP methods of function (get, post, put, patch, delete)',
-      'Similar to a traditional Django view',
-      'Is mapped manually to URLs'
-    ]
+#     an_apiview = [
+#       'Uses HTTP methods of function (get, post, put, patch, delete)',
+#       'Similar to a traditional Django view',
+#       'Is mapped manually to URLs'
+#     ]
 
-    return Response({'message':'Hello!', 'an_apiview':an_apiview})
+#     return Response({'message':'Hello!', 'an_apiview':an_apiview})
 
-  def post(self, request):
-    """Create POST method; Hello message with our name"""
+#   def post(self, request):
+#     """Create POST method; Hello message with our name"""
 
-    serializer = serializers.HelloSerializer(data=request.data)
+#     serializer = serializers.HelloSerializer(data=request.data)
 
-    if serializer.is_valid():
-      name = serializer.data.get('name')
-      message = 'Hello {0}'.format(name)
-      return Response({'message': message})
-    else:
-      return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     if serializer.is_valid():
+#       name = serializer.data.get('name')
+#       message = 'Hello {0}'.format(name)
+#       return Response({'message': message})
+#     else:
+#       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-  def put(self, request, pk=None):
-    """Handles updating an object"""
+#   def put(self, request, pk=None):
+#     """Handles updating an object"""
 
-    return Response({'method':'put'})
+#     return Response({'method':'put'})
 
-  def patch(self, request, pk=None):
-    """Patch request, only updates field provided in the request"""
+#   def patch(self, request, pk=None):
+#     """Patch request, only updates field provided in the request"""
 
-    return Response({'method':'patch'})
+#     return Response({'method':'patch'})
 
-  def delete(self, request, pk=None):
-    """Deletes an object"""
+#   def delete(self, request, pk=None):
+#     """Deletes an object"""
 
-    return Response({'method':'delete'})
-
+#     return Response({'method':'delete'})
 
 class HelloViewSet(viewsets.ViewSet):
   """API ViewSet Test"""
@@ -139,7 +138,7 @@ class UserProfileFeedViewSet(viewsets.ModelViewSet):
   authentication_classes = (TokenAuthentication,)
   serializer_class = serializers.ProfileFeedItemSerializer
   queryset = models.ProfileFeedItem.objects.all()
-  permissions_classes = (permissions.PostOwnStatus, IsAuthenticated)
+  permission_classes = (permissions.PostOwnStatus, IsAuthenticated)
 
   def perform_create(self, serializer):
     """Sets the user profile to the logged in user"""

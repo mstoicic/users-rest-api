@@ -11,4 +11,3 @@ class AuthTestCase(TestCase):
 
     def testLogin(self):
         self.client.login(username='test@dom.com', password='pass')
-# Create your tests here.
