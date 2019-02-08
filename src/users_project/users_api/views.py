@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from . import serializers
 from rest_framework import status
+from . import models
 # Create your views here.
 
 class HelloApiView(APIView):
@@ -51,8 +52,11 @@ class HelloApiView(APIView):
 
     return Response({'method':'delete'})
 
+
 class HelloViewSet(viewsets.ViewSet):
   """API ViewSet Test"""
+
+  serializer_class = serializers.HelloSerializer
 
   def list(self, request):
     """Returns a Hello message"""
@@ -64,3 +68,40 @@ class HelloViewSet(viewsets.ViewSet):
     ]
 
     return Response({'message':'Hello!', 'a_viewset':a_viewset})
+
+  def create(self, request):
+    """Create new Hello message"""
+    serializer = serializers.HelloSerializer(data=request.data)
+
+    if serializer.is_valid():
+      name = serializer.data.get('name')
+      message = 'Hello {0}'.format(name)
+      return Response({'message':message})
+    else:
+      return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+  
+  def retrive(self, request, pk=None):
+    """Handles getting an object by its ID"""
+
+    return Response({'http_method':'GET'})
+
+  def update(self, request, pk=None):
+    """Handles updating an object"""
+
+    return Response({'http_method':'PUT'})
+  
+  def partial_update(self, request, pk=None):
+    """Handles updating part of an object"""
+
+    return Response({'http_method':'PATCH'})
+
+  def destroy(self, request, pk=None):
+    """Handles removing an object"""
+
+    return Response({'http_method':'DELETE'})
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+  """Handles creating and updating users profile"""
+
+  serializer_class = serializers.UserProfileSerializer
+  queryset = models.UserProfile.object.all()
